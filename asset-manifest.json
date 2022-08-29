@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/nyc-sidewalk-visualization/static/css/main.a8b0fd22.css",
-    "main.js": "/nyc-sidewalk-visualization/static/js/main.2f866e36.js",
+    "main.js": "/nyc-sidewalk-visualization/static/js/main.0f002019.js",
     "static/js/787.8d1bc8d0.chunk.js": "/nyc-sidewalk-visualization/static/js/787.8d1bc8d0.chunk.js",
     "index.html": "/nyc-sidewalk-visualization/index.html",
     "main.a8b0fd22.css.map": "/nyc-sidewalk-visualization/static/css/main.a8b0fd22.css.map",
-    "main.2f866e36.js.map": "/nyc-sidewalk-visualization/static/js/main.2f866e36.js.map",
+    "main.0f002019.js.map": "/nyc-sidewalk-visualization/static/js/main.0f002019.js.map",
     "787.8d1bc8d0.chunk.js.map": "/nyc-sidewalk-visualization/static/js/787.8d1bc8d0.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.a8b0fd22.css",
-    "static/js/main.2f866e36.js"
+    "static/js/main.0f002019.js"
   ]
 }
