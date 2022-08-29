@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/nyc-sidewalk-visualization/static/css/main.0bdbb6a2.css",
-    "main.js": "/nyc-sidewalk-visualization/static/js/main.2ebf480f.js",
+    "main.css": "/nyc-sidewalk-visualization/static/css/main.49fa5ff5.css",
+    "main.js": "/nyc-sidewalk-visualization/static/js/main.cf2edf2b.js",
     "static/js/787.8d1bc8d0.chunk.js": "/nyc-sidewalk-visualization/static/js/787.8d1bc8d0.chunk.js",
     "index.html": "/nyc-sidewalk-visualization/index.html",
-    "main.0bdbb6a2.css.map": "/nyc-sidewalk-visualization/static/css/main.0bdbb6a2.css.map",
-    "main.2ebf480f.js.map": "/nyc-sidewalk-visualization/static/js/main.2ebf480f.js.map",
+    "main.49fa5ff5.css.map": "/nyc-sidewalk-visualization/static/css/main.49fa5ff5.css.map",
+    "main.cf2edf2b.js.map": "/nyc-sidewalk-visualization/static/js/main.cf2edf2b.js.map",
     "787.8d1bc8d0.chunk.js.map": "/nyc-sidewalk-visualization/static/js/787.8d1bc8d0.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.0bdbb6a2.css",
-    "static/js/main.2ebf480f.js"
+    "static/css/main.49fa5ff5.css",
+    "static/js/main.cf2edf2b.js"
   ]
 }
