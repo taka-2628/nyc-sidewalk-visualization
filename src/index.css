@@ -26,3 +26,23 @@ body {
   margin: 12px;
   border-radius: 4px;
 }
+#switchbar {
+  margin: 30px auto 0 auto;
+  width: 94%;
+}
+#sliderbar {
+  margin: 30px auto 0 auto;
+  width: 90%;
+}
+#switchbar h3,
+#sliderbar h3 {
+  margin-top: 10px;
+  margin-bottom: 2px;
+}
+.slider-container {
+  margin-top: 10px;
+}
+
+.MuiSlider-root .MuiSlider-markLabel {
+  color: #fff;
+}

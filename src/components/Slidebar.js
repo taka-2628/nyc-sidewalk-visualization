@@ -1,6 +1,21 @@
-import Slider from '@mui/material/Slider';
-import Box from '@mui/material/Box';
+import React, { useState } from 'react';
+import '../index.css';
 
+import Slider from '@mui/material/Slider';
+
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+
+const marks_trees = [
+  {
+    value: 0,
+    label: 'off'
+  },
+  {
+    value: 100,
+    label: 'on'
+  }
+]
 const marks = [
   {
     value: 0,
@@ -24,18 +39,40 @@ function valuetext(value) {
   return `${value}°C`;
 }
 
-function Slidebar(){
+function Slidebar( { isTreeOn, setIsTreeOn, isCollisionOn, setIsCollisionOn}){
+
   return (
-    <Box sx={{ width: 300 }}>
-      <Slider
-        aria-label="Always visible"
-        defaultValue={80}
-        getAriaValueText={valuetext}
-        step={10}
-        marks={marks}
-        valueLabelDisplay="on"
-      />
-    </Box>
+    <>
+      <div id="switchbar">
+        <div className='slider-container'>
+          <h3>Trees</h3>
+          <FormControlLabel control={<Switch checked={isTreeOn} onChange={(e) => setIsTreeOn(e.target.checked)} />} label={isTreeOn ? 'On' : 'Off'} />
+        </div>
+        <div className='slider-container'>
+          <h3>Traffic Accidents</h3>
+          <FormControlLabel control={<Switch checked={isCollisionOn} onChange={(e) => setIsCollisionOn(e.target.checked)} />} label={isCollisionOn ? 'On' : 'Off'} />
+        </div>
+        </div>
+      <div id='sliderbar'>
+        <div className='slider-container'>
+          <Slider
+              aria-label="Always visible"
+              defaultValue={0}
+              step={100}
+              marks={marks_trees}
+          />
+        </div>
+        <div className='slider-container'>
+          <Slider
+            aria-label="Always visible"
+            defaultValue={80}
+            getAriaValueText={valuetext}
+            step={10}
+            marks={marks}
+          />
+        </div>
+      </div>
+    </>
   );
 }
 
