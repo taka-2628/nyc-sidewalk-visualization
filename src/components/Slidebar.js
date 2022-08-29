@@ -9,37 +9,33 @@ import Switch from '@mui/material/Switch';
 const marks_trees = [
   {
     value: 0,
-    label: 'off'
+    label: 'less tree'
+  },
+  {
+    value: 50,
+    label: 'average'
   },
   {
     value: 100,
-    label: 'on'
+    label: 'more tree'
   }
 ]
-const marks = [
+const marks_collisions = [
   {
     value: 0,
-    label: '0°C',
+    label: 'more',
   },
   {
-    value: 20,
-    label: '20°C',
-  },
-  {
-    value: 37,
-    label: '37°C',
+    value: 50,
+    label: 'average',
   },
   {
     value: 100,
-    label: '100°C',
+    label: 'less',
   },
 ];
 
-function valuetext(value) {
-  return `${value}°C`;
-}
-
-function Slidebar( { isTreeOn, setIsTreeOn, isCollisionOn, setIsCollisionOn}){
+function Slidebar( { isTreeOn, setIsTreeOn, isCollisionOn, setIsCollisionOn, handleTreeCollisionSliderChange}){
 
   return (
     <>
@@ -57,18 +53,19 @@ function Slidebar( { isTreeOn, setIsTreeOn, isCollisionOn, setIsCollisionOn}){
         <div className='slider-container'>
           <Slider
               aria-label="Always visible"
-              defaultValue={0}
-              step={100}
+              step={50}
               marks={marks_trees}
+              defaultValue={50}
+              onChange={(e) => handleTreeCollisionSliderChange(e.target.value, 'tree')}
           />
         </div>
         <div className='slider-container'>
           <Slider
             aria-label="Always visible"
-            defaultValue={80}
-            getAriaValueText={valuetext}
-            step={10}
-            marks={marks}
+            step={50}
+            marks={marks_collisions}
+            defaultValue={50}
+            onChange={(e) => handleTreeCollisionSliderChange(e.target.value, 'collision')}
           />
         </div>
       </div>

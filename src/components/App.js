@@ -16,8 +16,39 @@ function App() {
   const [ isTreeOn, setIsTreeOn ] = useState(false);
   const [ isCollisionOn, setIsCollisionOn ] = useState(false);
 
+  let filterTree = ['==', ['string', ['get', 'tree_category']], 'average']
+  let filterCollision = ['==', ['string', ['get', 'collision_category']], 'average']
+  
   const [filterHour, setFilterHour] = useState(['==', ['number', ['get', 'Hour']], 12]);
   const [filterDay, setFilterDay] = useState(['!=', ['string', ['get', 'Day']], 'placeholder']);
+
+  function handleTreeCollisionSliderChange(value, key){
+    if(key === 'tree'){
+      console.log(value)
+      if(value === 0){
+        filterTree = (['==', ['string', ['get', 'tree_category']], 'less']) 
+      } else if (value === 50){
+        filterTree = (['==', ['string', ['get', 'tree_category']], 'average'])
+      } else if (value === 100){
+        filterTree = (['==', ['string', ['get', 'tree_category']], 'more'])
+      } else {
+        console.error('error');
+      }
+    } else if (key === 'collision'){
+      console.log(value)
+      if(value === 0){
+        filterCollision = (['!=', ['string', ['get', 'collision_category']], 'placeholder']) 
+      } else if (value === 50){
+        filterCollision = (['!=', ['string', ['get', 'collision_category']], 'more'])
+      } else if (value === 100){
+        filterCollision = (['==', ['string', ['get', 'collision_category']], 'less'])
+      } else {
+        console.error('error');
+      }
+    }
+    map.current.setFilter('data-combined', ['all', filterTree, filterCollision])
+  }
+    
 
   function handleSliderChange(e){
     const hour = (parseInt(e.target.value))
@@ -48,7 +79,7 @@ function App() {
       center: [lng, lat],
       zoom: zoom
     });
-  }, []);
+  });
   
   useEffect(() => {
     if (!map.current) return; // wait for map to initialize
@@ -57,23 +88,21 @@ function App() {
       setLat(map.current.getCenter().lat.toFixed(4));
       setZoom(map.current.getZoom().toFixed(2));
     });
-  }, []);
+  });
 
   useEffect(() => {
     if (!map.current) return; 
     map.current.on('load', () => {
-      let filterHour = ['==', ['number', ['get', 'Hour']], 12];
-      let filterDay = ['!=', ['string', ['get', 'Day']], 'placeholder'];
-      
+
       map.current.addLayer({
-        id: 'sidewalks_people_total',
+        id: 'data-combined',
         type: 'fill',
         source: {
           type: 'geojson',
-          data: 'https://taka-2628.github.io/nyc-sidewalk-geojson/data/nyc_tracts_sidewalks.geojson' // replace this with the url of your own geojson
+          data: 'https://taka-2628.github.io/nyc-sidewalk-geojson/data/nyc_tracts_combined_category.geojson'
         },
         paint: {
-          'fill-color': [
+          'fill-color': /*'#AA5E79'*/[
             'interpolate',
             ['linear'],
             ['get', 'p_total_avg'],
@@ -92,39 +121,9 @@ function App() {
           ],
           'fill-outline-color': 'rgba(255,255,255,0.5)',
           'fill-opacity': 0.75
-        }
+        }, 
+        filter: ['all', filterTree, filterCollision]
       });
-      
-      /*
-      map.current.addLayer({
-        id: 'sidewalks_area_p',
-        type: 'fill',
-        source: {
-          type: 'geojson',
-          data: 'https://taka-2628.github.io/nyc-sidewalk-geojson/data/nyc_tracts_sidewalks.geojson' // replace this with the url of your own geojson
-        },
-        paint: {
-          'fill-color': [
-            'interpolate',
-            ['linear'],
-            ['get', 'area_p_avg'],
-            0,
-            '#AA5E79',
-            20000,
-            '#A2719B',
-            40000,
-            '#8B88B6',
-            60000,
-            '#669EC4',
-            80000,
-            '#3BB3C3',
-            100000,
-            '#2DC4B2'
-            ],
-            'fill-opacity': 0.75
-        }
-      });
-      */
 
       map.current.addLayer({
         id: 'collisions',
@@ -173,7 +172,7 @@ function App() {
     <div>
       <div className="sidebar">
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-        <Slidebar isTreeOn={isTreeOn} setIsTreeOn={setIsTreeOn} isCollisionOn={isCollisionOn} setIsCollisionOn={setIsCollisionOn} />
+        <Slidebar isTreeOn={isTreeOn} setIsTreeOn={setIsTreeOn} isCollisionOn={isCollisionOn} setIsCollisionOn={setIsCollisionOn} handleTreeCollisionSliderChange={handleTreeCollisionSliderChange}/>
         <div className="session">
           <h2>Hour: <label id="active-hour">12PM</label></h2>
           <input
