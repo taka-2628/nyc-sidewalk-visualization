@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import '../stylesheets/App.css';
+import '../index.css';
 
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import Slidebar from './Slidebar';
@@ -9,26 +9,117 @@ mapboxgl.accessToken = 'pk.eyJ1IjoidGgtdGgiLCJhIjoiY2t3N2Q1YmNxOW8wajMxczE4Zndqa
 function App() {
   const mapContainer = useRef(null);
   const map = useRef(null);
+  
   const [lng, setLng] = useState(-73.99);
-  const [lat, setLat] = useState(40.78);
-  const [zoom, setZoom] = useState(11.50); 
-  
-  const [ isTreeOn, setIsTreeOn ] = useState(false);
-  const [ isCollisionOn, setIsCollisionOn ] = useState(false);
+  const [lat, setLat] = useState(40.75);
+  const [zoom, setZoom] = useState(12); 
 
-  let filterTree = ['==', ['string', ['get', 'tree_category']], 'average']
-  let filterCollision = ['==', ['string', ['get', 'collision_category']], 'average']
-  
-  const [filterHour, setFilterHour] = useState(['==', ['number', ['get', 'Hour']], 12]);
-  const [filterDay, setFilterDay] = useState(['!=', ['string', ['get', 'Day']], 'placeholder']);
+  const switchOne = useRef(null);
+  const switchTwo = useRef(null);
+  const switchThree = useRef(null);
+
+  const sliderOne = useRef(null);
+  const sliderTwo = useRef(null);
+  const sliderThree = useRef(null);
+
+  const legendOne = useRef(null);
+  const legendTwo = useRef(null);
+
+  let isSidewalkOn = true;
+  let isTreeOn = false;
+  let isCollisionOn = false;
+  let isCombinedDataOn = false;
+
+  function setIsSidewalkOn(){
+    isSidewalkOn = !isSidewalkOn
+    if(isSidewalkOn){
+      switchOne.current.classList.add('Mui-checked');
+    } else {
+      switchOne.current.classList.remove('Mui-checked');
+    }
+  }
+  function setIsTreeOn(){
+    isTreeOn = !isTreeOn
+    if(isTreeOn){
+      switchTwo.current.classList.add('Mui-checked');
+    } else {
+      switchTwo.current.classList.remove('Mui-checked');
+    }
+  }
+  function setIsCollisionOn(){
+    isCollisionOn =!isCollisionOn
+    if(isCollisionOn){
+      switchThree.current.classList.add('Mui-checked');
+    } else {
+      switchThree.current.classList.remove('Mui-checked');
+    }
+  }
+  function setFindNeighborhoodOn(){
+    isCombinedDataOn = !isCombinedDataOn
+    if (isCombinedDataOn){
+      isSidewalkOn = false;
+      isTreeOn = false;
+      isCollisionOn = false;
+      // Switch
+      switchOne.current.classList.remove('Mui-checked');
+      switchOne.current.firstChild.disabled = true;
+      switchTwo.current.classList.remove('Mui-checked');
+      switchTwo.current.firstChild.disabled = true;
+      switchThree.current.classList.remove('Mui-checked');
+      switchThree.current.firstChild.disabled = true;
+      // Slider
+      sliderOne.current.classList.remove('Mui-disabled');
+      sliderOne.current.lastChild.firstChild.disabled = false;
+      sliderTwo.current.classList.remove('Mui-disabled');
+      sliderTwo.current.lastChild.firstChild.disabled = false;
+      sliderThree.current.classList.remove('Mui-disabled');
+      sliderThree.current.lastChild.firstChild.disabled = false;
+      // Legend
+    } else {
+      isSidewalkOn = true
+      isTreeOn = false
+      isCollisionOn = false
+      // Switch
+      switchOne.current.firstChild.disabled = false;
+      switchOne.current.firstChild.checked = true;
+      switchOne.current.classList.add('Mui-checked');
+      switchTwo.current.firstChild.disabled = false;
+      switchTwo.current.firstChild.checked = false;
+      switchThree.current.firstChild.disabled = false;
+      switchThree.current.firstChild.checked = false;
+      // Slider
+      sliderOne.current.classList.add('Mui-disabled');
+      sliderOne.current.lastChild.firstChild.disabled = true;
+      sliderTwo.current.classList.add('Mui-disabled');
+      sliderTwo.current.lastChild.firstChild.disabled = true;
+      sliderThree.current.classList.add('Mui-disabled');
+      sliderThree.current.lastChild.firstChild.disabled = true;
+      // Legend
+    }  
+  }
+
+  let filterPopulation = ['==', ['string', ['get', 'pop_category']], 'less']
+  let filterTree = ['!=', ['string', ['get', 'tree_category']], 'placeholder']
+  let filterCollision = ['!=', ['string', ['get', 'collision_category']], 'placeholder']
 
   function handleTreeCollisionSliderChange(value, key){
-    if(key === 'tree'){
+    if (key === 'population'){
       console.log(value)
       if(value === 0){
-        filterTree = (['==', ['string', ['get', 'tree_category']], 'less']) 
+        filterPopulation = (['==', ['string', ['get', 'pop_category']], 'less']) 
       } else if (value === 50){
-        filterTree = (['==', ['string', ['get', 'tree_category']], 'average'])
+        filterPopulation = (['==', ['string', ['get', 'pop_category']], 'average'])
+      } else if (value === 100){
+        filterPopulation = (['==', ['string', ['get', 'pop_category']], 'more'])
+      } else {
+        console.error('error');
+      }
+    } else if(key === 'tree'){
+      console.log(value)
+      if(value === 0){
+        filterTree = (['!=', ['string', ['get', 'tree_category']], 'placeholder']) 
+      } else if (value === 50){
+        filterTree = (['!=', ['string', ['get', 'tree_category']], 'less'])
       } else if (value === 100){
         filterTree = (['==', ['string', ['get', 'tree_category']], 'more'])
       } else {
@@ -46,29 +137,7 @@ function App() {
         console.error('error');
       }
     }
-    map.current.setFilter('data-combined', ['all', filterTree, filterCollision])
-  }
-    
-
-  function handleSliderChange(e){
-    const hour = (parseInt(e.target.value))
-    setFilterHour(['==', ['number', ['get', 'Hour']], hour]);
-    map.current.setFilter('collisions', ['all', filterHour, filterDay]);
-  }
-
-  function handleDaySliderChange(e){
-    const day = e.target.value;
-    console.log(day)
-    if (day === 'all') {
-      setFilterDay(['!=', ['string', ['get', 'Day']], 'placeholder']);
-    } else if (day === 'weekday') {
-      setFilterDay(['match',['get', 'Day'],['Sat', 'Sun'], false, true]);
-    } else if (day === 'weekend') {
-      setFilterDay(['match', ['get', 'Day'], ['Sat', 'Sun'], true, false]);
-    } else {
-      console.error('error');
-    }
-    map.current.setFilter('collisions', ['all', filterHour, filterDay]);
+    map.current.setFilter('data-combined', ['all', filterPopulation, filterTree, filterCollision])
   }
 
   useEffect(() => {
@@ -122,7 +191,7 @@ function App() {
           'fill-outline-color': 'rgba(255,255,255,0.5)',
           'fill-opacity': 0.75
         }, 
-        filter: ['all', filterTree, filterCollision]
+        filter: ['all', filterPopulation, filterTree, filterCollision]
       });
 
       map.current.addLayer({
@@ -133,19 +202,20 @@ function App() {
           data: 'https://taka-2628.github.io/nyc-sidewalk-geojson/data/collisions1601.geojson' 
         },
         'paint': {
-          'circle-radius': 2,
+          'circle-radius': 1.5,
           'circle-stroke-width': 1,
           'circle-color': '#F45459',
           'circle-stroke-color': '#F45459'
-        },
-        'filter': ['all', filterHour, filterDay]
+        }
       });
       
       // SEE LAYERS
       const layers = map.current.getStyle().layers;
       console.log(layers)
-      
+      const a = map.current.setLayoutProperty('nyc-sidewalks')
+      console.log(a)
       //RE-ORGANIZE STACKING ORDER OF LAYERS
+      map.current.moveLayer('nyc-sidewalk-geometry')
       map.current.moveLayer('nyc-trees-points');
       map.current.moveLayer('collisions');
     });    
@@ -155,6 +225,11 @@ function App() {
     if (!map.current) return;
     map.current.on('idle', () => {  
       // Set up the corresponding toggle button for each layer.
+      if (isSidewalkOn){
+        map.current.setLayoutProperty('nyc-sidewalk-geometry', 'visibility', 'visible');
+      } else {
+        map.current.setLayoutProperty('nyc-sidewalk-geometry', 'visibility', 'none');
+      }
       if (isTreeOn) {
         map.current.setLayoutProperty('nyc-trees-points', 'visibility', 'visible');
       } else {
@@ -165,38 +240,29 @@ function App() {
       } else {
         map.current.setLayoutProperty('collisions', 'visibility', 'none');
       }
+      if (isCombinedDataOn){
+        map.current.setLayoutProperty('data-combined', 'visibility', 'visible');
+      } else {
+        map.current.setLayoutProperty('data-combined', 'visibility', 'none');
+      }
     })
   })
+
+  useEffect(() => {
+    sliderOne.current.classList.add('Mui-disabled');
+    sliderOne.current.lastChild.firstChild.disabled = true;
+    sliderTwo.current.classList.add('Mui-disabled');
+    sliderTwo.current.lastChild.firstChild.disabled = true;
+    sliderThree.current.classList.add('Mui-disabled');
+    sliderThree.current.lastChild.firstChild.disabled = true;
+  }, [])
   
   return (
     <div>
       <div className="sidebar">
-        Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-        <Slidebar isTreeOn={isTreeOn} setIsTreeOn={setIsTreeOn} isCollisionOn={isCollisionOn} setIsCollisionOn={setIsCollisionOn} handleTreeCollisionSliderChange={handleTreeCollisionSliderChange}/>
-        <div className="session">
-          <h2>Hour: <label id="active-hour">12PM</label></h2>
-          <input
-            id="slider"
-            className="row"
-            type="range"
-            min="0"
-            max="23"
-            step="1"
-            value="12"
-            onChange={handleSliderChange}
-          />
-        </div>
-          <div className="session">
-          <h2>Day of the week</h2>
-          <div className="row" id="filters" onChange={handleDaySliderChange}>
-            <input id="all" type="radio" name="toggle" value="all" defaultChecked="checked" />
-            <label htmlFor="all">All</label>
-            <input id="weekday" type="radio" name="toggle" value="weekday"/>
-            <label htmlFor="weekday">Weekday</label>
-            <input id="weekend" type="radio" name="toggle" value="weekend"/>
-            <label htmlFor="weekend">Weekend</label>
-          </div>
-        </div>
+        <h1>NYC Interactive Neighborhood Map</h1>
+        {/*Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}*/}
+        <Slidebar setIsSidewalkOn={setIsSidewalkOn} setIsTreeOn={setIsTreeOn} setIsCollisionOn={setIsCollisionOn} handleTreeCollisionSliderChange={handleTreeCollisionSliderChange} setFindNeighborhoodOn={setFindNeighborhoodOn} switchOne={switchOne} switchTwo={switchTwo} switchThree={switchThree} sliderOne={sliderOne} sliderTwo={sliderTwo} sliderThree={sliderThree} legendOne={legendOne} legendTwo={legendTwo}/>
       </div>
       <div ref={mapContainer} className="map-container" />
     </div>

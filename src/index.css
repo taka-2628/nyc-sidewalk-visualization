@@ -1,9 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 body {
   margin: 0%;
   padding: 0%;
-  font-family: 'Lexend Deca', sans-serif;
+  font-family: /*'Roboto', sans-serif;*/ 'Source Code Pro', monospace;
   overflow: hidden; /* Hide scrollbars */
 }
 
@@ -18,31 +20,74 @@ body {
   background-color: rgba(35, 55, 75, 0.9);
   color: #fff;
   padding: 6px 12px;
-  font-family: monospace;
   z-index: 1;
   position: absolute;
   top: 0;
   left: 0;
+  width: 25%;
   margin: 12px;
   border-radius: 4px;
+  text-align: center;
+}
+.sidebar h2 {
+  margin-top: 30px;
+  margin-bottom: 0;
+  font-size: 1.35em;
+}
+.sidebar hr {
+  width: 84%;
 }
 #switchbar {
-  margin: 30px auto 0 auto;
-  width: 94%;
+  margin: 30px auto 20px auto;
+  width: 84%;
+  text-align: left;
+}
+#switchbar-2 {
+  margin: 10px auto 0 auto;
+  width: 84%;
+  text-align: left;
 }
 #sliderbar {
+  text-align: center;
   margin: 30px auto 0 auto;
-  width: 90%;
+  width: 80%;
+  padding-bottom: 30px;
 }
-#switchbar h3,
 #sliderbar h3 {
-  margin-top: 10px;
-  margin-bottom: 2px;
+  margin: 20px auto 4px auto;
 }
 .slider-container {
   margin-top: 10px;
 }
-
+.MuiFormControlLabel-root .css-ahj2mt-MuiTypography-root {
+  font-family: 'Source Code Pro', monospace;
+}
 .MuiSlider-root .MuiSlider-markLabel {
   color: #fff;
+  font-family: 'Source Code Pro', monospace;
+}
+
+.legend {
+  width: 84%;
+  margin: 30px auto;
+}
+.row {
+  height: 12px;
+  width: 100%;
+}
+
+.colors {
+  background: linear-gradient(to right, #2dc4b2, #3bb3c3, #669ec4, #8b88b6, #a2719b, #aa5e79);
+  margin-bottom: 5px;
+}
+
+.colors2 {
+  background: linear-gradient(to right, #5dd6e9, #a1e34a, #f2a16e, #e48f7c, #e34a4a, #e34a4a);
+  margin-bottom: 5px;
+}
+
+.label {
+  width: 16.666%;
+  display: inline-block;
+  text-align: center;
 }
