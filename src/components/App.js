@@ -10,9 +10,12 @@ function App() {
   const mapContainer = useRef(null);
   const map = useRef(null);
   
-  const [lng, setLng] = useState(-73.99);
-  const [lat, setLat] = useState(40.75);
-  const [zoom, setZoom] = useState(12); 
+  const lng = -73.99
+  const lat = 40.75
+  const zoom = 12
+  //const [lng, setLng] = useState(-73.99);
+  //const [lat, setLat] = useState(40.75);
+  //const [zoom, setZoom] = useState(12); 
 
   const switchOne = useRef(null);
   const switchTwo = useRef(null);
@@ -146,10 +149,11 @@ function App() {
       container: mapContainer.current,
       style: 'mapbox://styles/th-th/cl7571mfr001l14pim5etz43v',
       center: [lng, lat],
+      minZoom: 12,
       zoom: zoom
     });
   });
-  
+  /*
   useEffect(() => {
     if (!map.current) return; // wait for map to initialize
     map.current.on('move', () => {
@@ -158,7 +162,7 @@ function App() {
       setZoom(map.current.getZoom().toFixed(2));
     });
   });
-
+  */
   useEffect(() => {
     if (!map.current) return; 
     map.current.on('load', () => {
@@ -212,8 +216,6 @@ function App() {
       // SEE LAYERS
       const layers = map.current.getStyle().layers;
       console.log(layers)
-      const a = map.current.setLayoutProperty('nyc-sidewalks')
-      console.log(a)
       //RE-ORGANIZE STACKING ORDER OF LAYERS
       map.current.moveLayer('nyc-sidewalk-geometry')
       map.current.moveLayer('nyc-trees-points');
