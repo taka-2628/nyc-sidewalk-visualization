@@ -13,9 +13,6 @@ function App() {
   const lng = -73.99
   const lat = 40.75
   const zoom = 12
-  //const [lng, setLng] = useState(-73.99);
-  //const [lat, setLat] = useState(40.75);
-  //const [zoom, setZoom] = useState(12); 
 
   const switchOne = useRef(null);
   const switchTwo = useRef(null);
@@ -153,16 +150,7 @@ function App() {
       zoom: zoom
     });
   });
-  /*
-  useEffect(() => {
-    if (!map.current) return; // wait for map to initialize
-    map.current.on('move', () => {
-      setLng(map.current.getCenter().lng.toFixed(4));
-      setLat(map.current.getCenter().lat.toFixed(4));
-      setZoom(map.current.getZoom().toFixed(2));
-    });
-  });
-  */
+  
   useEffect(() => {
     if (!map.current) return; 
     map.current.on('load', () => {
@@ -196,21 +184,6 @@ function App() {
           'fill-opacity': 0.75
         }, 
         filter: ['all', filterPopulation, filterTree, filterCollision]
-      });
-
-      map.current.addLayer({
-        id: 'collisions',
-        type: 'circle',
-        source: {
-          type: 'geojson',
-          data: 'https://taka-2628.github.io/nyc-sidewalk-geojson/data/collisions1601.geojson' 
-        },
-        'paint': {
-          'circle-radius': 1.5,
-          'circle-stroke-width': 1,
-          'circle-color': '#F45459',
-          'circle-stroke-color': '#F45459'
-        }
       });
       
       // SEE LAYERS
